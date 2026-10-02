@@ -494,7 +494,7 @@ async function oaResolve(p) {
     const r = await fetch(`https://api.openalex.org/works/doi:${encodeURIComponent(p.doi)}`);
     if (r.ok) return await r.json();
   }
-  const r = await fetch(`https://api.openalex.org/works?search=${encodeURIComponent(p.title)}&per-page=5&select=id,display_name,publication_year,cited_by_count,cited_by_api_url,authorships,doi,type`);
+  const r = await fetch(`https://api.openalex.org/works?search=${encodeURIComponent(p.title)}&per-page=5&select=id,display_name,publication_year,cited_by_count,authorships,doi,type`);
   if (!r.ok) throw new Error('OpenAlex 请求失败 ' + r.status);
   const d = await r.json();
   const nt = norm(p.title).replace(/[^a-z0-9 ]/g, '');
@@ -533,8 +533,11 @@ async function renderOACited(p, body) {
     if (!w) { body.innerHTML = '<div class="empty-hint">在 OpenAlex 中未找到该论文（可尝试补充 DOI）</div>'; return; }
     body.innerHTML = `<div class="small muted" style="padding:8px 14px 0">OpenAlex 记录：被引 <b>${w.cited_by_count}</b> 次 · 以下为前 25 篇引用者</div>
       <div id="citation-chart"></div><ul class="ext-list" id="cited-list"><li><span class="spin"></span> 加载中…</li></ul>`;
-    const cr = await fetch(`${w.cited_by_api_url}&per-page=25`);
-    if (!cr.ok) throw new Error('cited-by 请求失败 ' + cr.status);
+    // OpenAlex 新版已不再返回 cited_by_api_url（为 null），改用 filter=cites:{shortId} 自行构造
+    const shortId = (w.id || '').split('/').pop();
+    const citedUrl = `https://api.openalex.org/works?filter=cites:${encodeURIComponent(shortId)}&per-page=25&select=id,display_name,publication_year,doi,cited_by_count,authorships`;
+    const cr = await fetch(citedUrl);
+    if (!cr.ok) throw new Error('cited-by 请求失败 ' + cr.status + ' · ' + citedUrl);
     const cd = await cr.json();
     const items = cd.results || [];
     $('#cited-list').innerHTML = items.length ? items.map(c => {

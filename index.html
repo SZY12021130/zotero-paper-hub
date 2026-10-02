@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zotero Paper Hub · 文献检索与追溯</title>
+<link rel="stylesheet" href="assets/style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📚</text></svg>">
+</head>
+<body>
+<div id="app">
+  <!-- ============ Loading screen ============ -->
+  <div id="loader">
+    <div class="loader-box">
+      <div class="loader-logo">📚</div>
+      <div class="loader-title">Zotero Paper Hub</div>
+      <div class="loader-bar"><div id="loader-fill"></div></div>
+      <div id="loader-text">正在加载文献数据…</div>
+    </div>
+  </div>
+
+  <!-- ============ Top bar ============ -->
+  <header id="topbar" hidden>
+    <div class="brand" data-nav="#/">
+      <span class="brand-logo">📚</span>
+      <span class="brand-name">Paper Hub</span>
+      <span class="brand-meta" id="brand-meta"></span>
+    </div>
+    <div class="search-wrap">
+      <input id="global-search" type="text" spellcheck="false"
+             placeholder="搜索标题 / 作者 / 期刊 / 摘要 / 标签…  支持 title: author: venue: tag: year: 前缀">
+      <button id="search-btn" title="搜索">🔍</button>
+    </div>
+    <nav class="topnav">
+      <a href="#/" data-navlink="#/">概览</a>
+      <a href="#/papers" data-navlink="#/papers">文献库</a>
+      <a href="#/authors" data-navlink="#/authors">作者</a>
+      <a href="#/venues" data-navlink="#/venues">期刊/会议</a>
+      <a href="#/tags" data-navlink="#/tags">标签</a>
+      <button id="theme-toggle" title="切换主题">🌙</button>
+    </nav>
+  </header>
+
+  <main id="main" hidden></main>
+</div>
+
+<script src="assets/echarts.min.js"></script>
+<script src="assets/app.js"></script>
+</body>
+</html>

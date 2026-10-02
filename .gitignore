@@ -1,0 +1,4 @@
+zotero_snapshot.sqlite
+*.bak
+__pycache__/
+.DS_Store
